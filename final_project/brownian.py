@@ -1,5 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 def log_likelihood(theta, prices, dt):
     """
@@ -61,3 +63,22 @@ def estimate_gbm_parameters(prices, dt):
     mu, sigma = result.x
 
     return mu, sigma
+
+def plot_gbm(index, prices, simulated_prices, stock_name):
+    # Plot simulated prices
+    plt.figure(figsize=(10, 6))
+    plt.plot(index, prices, 'b-', alpha=1, label='Actual Price')
+    plt.plot(index, simulated_prices.T, 'r-', alpha=0.05)
+    plt.plot(index, np.mean(simulated_prices, axis=0), 'green', alpha=1, label='Average Simulated Price')
+
+    # get legend handles and labels
+    blue_patch = mpatches.Patch(color='blue', label='Actual Price')
+    red_patch = mpatches.Patch(color='red', label='Simulated Prices')
+    green_patch = mpatches.Patch(color='green', label='Average Simulated Price')
+
+    plt.xlabel('Time')
+    plt.ylabel('Stock Price')
+    plt.title('Geometric Brownian Motion - Simulated Stock Prices for ' + stock_name)
+    plt.legend(handles=[blue_patch, red_patch, green_patch], labels=['Actual Prices', 'Simulated Prices', 'Average Simulated Price'])
+    plt.grid(True)
+    
